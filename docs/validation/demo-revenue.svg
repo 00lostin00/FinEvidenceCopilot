@@ -1,16 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="261" viewBox="0 0 900 261" role="img">
-<rect width="100%" height="100%" fill="#f7f9fc"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" role="img" aria-labelledby="title description">
+<rect width="100%" height="100%" rx="12" fill="#f8fafc"/>
 <title>营业收入（虚构样本）</title>
-<text x="20" y="30" font-size="19">营业收入（虚构样本） / 万元</text>
-<text x="20" y="83" font-size="14">青禾科技（虚构） 2023</text>
-<rect x="530.00" y="65" width="133.33" height="24" fill="#3563a9"/>
-<text x="760" y="83" font-size="14">10000.00</text>
-<text x="20" y="135" font-size="14">青禾科技（虚构） 2024</text>
-<rect x="530.00" y="117" width="160.00" height="24" fill="#3563a9"/>
-<text x="760" y="135" font-size="14">12000.00</text>
-<text x="20" y="187" font-size="14">青禾科技（虚构） 2025</text>
-<rect x="530.00" y="169" width="200.00" height="24" fill="#3563a9"/>
-<text x="760" y="187" font-size="14">15000.00</text>
-<line x1="530" y1="55" x2="530" y2="226" stroke="#888"/>
-<text x="20" y="249" font-size="12">全部数据为虚构教学样本；负值向左，正值向右。</text>
+<desc id="description">全部数据为虚构教学样本，数值与来源在工作台明细中列出。</desc>
+<g font-family="system-ui, -apple-system, Segoe UI, Microsoft YaHei, sans-serif">
+<text id="title" x="28" y="36" font-size="17" font-weight="600" fill="#334155">营业收入（虚构样本）</text>
+<text x="28" y="59" font-size="11" fill="#94a3b8">同一指标口径 · 单位：万元</text>
+<text x="858" y="59" text-anchor="end" font-size="10" letter-spacing="1" fill="#94a3b8">FINEVIDENCE / DATA VIEW</text>
+<line x1="390" y1="78" x2="390" y2="268" stroke="#d3dce9"/>
+<text x="28" y="108" font-size="13" fill="#64748b">青禾科技（虚构） 2023</text>
+<rect x="390.00" y="87" width="240.00" height="30" rx="5" fill="#a8bef2"/>
+<text x="858" y="108" text-anchor="end" font-size="14" font-weight="600" fill="#334155">10000.00</text>
+<text x="28" y="171" font-size="13" fill="#64748b">青禾科技（虚构） 2024</text>
+<rect x="390.00" y="150" width="288.00" height="30" rx="5" fill="#7298ed"/>
+<text x="858" y="171" text-anchor="end" font-size="14" font-weight="600" fill="#334155">12000.00</text>
+<text x="28" y="234" font-size="13" fill="#64748b">青禾科技（虚构） 2025</text>
+<rect x="390.00" y="213" width="360.00" height="30" rx="5" fill="#2358e8"/>
+<text x="858" y="234" text-anchor="end" font-size="14" font-weight="600" fill="#334155">15000.00</text>
+<line x1="28" y1="287" x2="872" y2="287" stroke="#e2e8f0"/>
+<text x="28" y="309" font-size="10" fill="#94a3b8">全部数据为虚构教学样本；负值向左，正值向右。</text>
+</g>
 </svg>

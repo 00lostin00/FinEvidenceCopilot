@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从资料、指标到图表，保留每一步证据的金融资料研究台。">
+  <title>FinEvidence · 金融资料研究台</title>
+  <link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+  <link rel="stylesheet" href="/static/app.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#research">跳到研究问题</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="FinEvidence 首页">
+        <img src="/static/logo.svg" width="42" height="42" alt="">
+        <span><strong>FinEvidence<span class="brand-dot">.</span></strong><small>金融资料研究台</small></span>
+      </a>
+      <nav aria-label="项目导航">
+        <a class="nav-active" href="#research">研究台</a>
+        <a href="#library">资料库</a>
+        <a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a>
+        <a href="https://github.com/00lostin00/FinEvidenceCopilot" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+      <span id="service-status" class="connection"><i></i>连接中</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow"><span></span> EVIDENCE BEFORE ANSWERS</p>
+        <h1 id="page-title">让每个数字，<br class="mobile-break">都有据可查<span>。</span></h1>
+        <p class="intro-copy">从问题到资料、计算与图表。在一个工作台里查看结论，也查看结论从哪里来。</p>
+      </div>
+      <div class="intro-note"><span class="note-mark">01 /</span><strong>问得清楚，算得明白</strong><p>公司 · 年度 · 指标<br>同一口径，逐项可核验</p></div>
+    </section>
+
+    <section class="scope-bar" aria-label="当前资料范围">
+      <div><span class="scope-icon">▧</span><strong id="company-count">—</strong><span>家样本公司</span></div>
+      <div><strong id="year-span">—</strong><span>年度范围</span></div>
+      <div><strong id="document-count">—</strong><span>份资料</span></div>
+      <div class="scope-note"><span class="soft-dot"></span>虚构教学样本 · 非实时行情</div>
+    </section>
+
+    <div class="workspace">
+      <div class="research-column">
+        <section id="research" class="panel composer" aria-labelledby="research-heading">
+          <div class="section-line"><h2 id="research-heading">开始一项研究</h2><span class="tiny-tag" id="provider-label">本地资料</span></div>
+          <form id="ask-form">
+            <label for="question" class="sr-only">研究问题</label>
+            <textarea id="question" name="question" rows="2" maxlength="500" required placeholder="例如：比较青禾科技和澄海制造 2025 年净利率">青禾科技2023至2025年收入画图</textarea>
+            <div class="composer-bottom"><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 发送 · <span id="char-count">0</span>/500</span><button id="submit" class="primary-button" type="submit"><span>开始研究</span><b aria-hidden="true">↗</b></button></div>
+          </form>
+          <div class="example-label">试试这些问题</div>
+          <div id="examples" class="examples">
+            <button type="button" data-question="青禾科技2023至2025年收入画图"><span>↗</span> 收入趋势</button>
+            <button type="button" data-question="比较青禾科技和澄海制造2025年净利率"><span>⇄</span> 公司对比</button>
+            <button type="button" data-question="青禾科技2025年营业收入同比"><span>%</span> 收入同比</button>
+            <button type="button" data-question="利润为什么和现金流不同"><span>≡</span> 概念解释</button>
+          </div>
+          <p class="field-hint">支持青禾科技、澄海制造；每次查询一个指标。金额单位为万元。</p>
+        </section>
+
+        <section id="results" class="results" aria-live="polite" aria-busy="false">
+          <div class="results-heading"><h2>研究结果</h2><div id="result-meta" class="result-meta">准备就绪</div></div>
+          <div id="notice" class="notice" hidden></div>
+          <div id="loading" class="panel loading-state" hidden><div class="spinner"></div><div><strong>正在检索资料与计算指标</strong><p>结果完成后，将一起呈现公式、引用与图表。</p></div></div>
+          <div id="empty-state" class="panel empty-state"><span class="empty-symbol">⌕</span><h3>从一个具体的问题开始</h3><p>点击示例，或填写公司、年份和指标。</p></div>
+          <div id="answer-content" hidden>
+            <div id="steps" class="result-steps" aria-label="结果处理步骤"></div>
+            <div id="facts" class="fact-grid"></div>
+            <section id="chart-panel" class="panel chart-panel" hidden>
+              <div class="section-line"><div><p class="small-eyebrow">METRIC VISUALIZATION</p><h3 id="chart-title">指标趋势</h3></div><button id="download-chart" class="quiet-button" type="button">↓ 导出 SVG</button></div>
+              <img id="chart-image" alt="查询指标图表" hidden>
+              <p id="chart-status" class="field-hint">正在生成图表…</p>
+            </section>
+            <section class="panel answer-panel">
+              <div class="section-line"><h3 id="answer-title">结果摘要</h3><button id="copy-answer" class="quiet-button" type="button">复制结果</button></div>
+              <p id="answer-text" class="answer-text"></p>
+              <div id="table-wrap" class="table-wrap" hidden><table><caption class="sr-only">查询指标明细</caption><thead><tr><th scope="col">公司 / 年度</th><th scope="col">指标</th><th scope="col">数值</th><th scope="col">来源</th></tr></thead><tbody id="fact-table"></tbody></table></div>
+              <details id="calculation" class="calculation"><summary>查看计算口径与查询计划<span>＋</span></summary><div id="formula-list"></div><dl id="plan-list" class="plan-list"></dl></details>
+              <div class="result-foot"><span id="run-id"></span><span id="elapsed"></span></div>
+            </section>
+          </div>
+        </section>
+      </div>
+
+      <aside class="evidence-column" aria-label="资料与查询记录">
+        <section class="panel evidence-panel"><div class="section-line"><h2>证据资料</h2><span id="evidence-count" class="count-badge">0</span></div><p class="panel-subtitle">查询命中的原文片段与出处</p><div id="evidence-list"><div class="aside-empty">研究完成后，在这里核对来源。</div></div><div id="fact-sources"></div></section>
+        <section class="panel history-panel"><div class="section-line"><h2>最近研究</h2><button id="clear-history" class="text-button" type="button">清空</button></div><p class="panel-subtitle">保存在当前浏览器，点击重新查询</p><div id="history-list"></div></section>
+        <section id="library" class="panel library-panel"><p class="small-eyebrow">YOUR RESEARCH UNIVERSE</p><h2>当前资料库</h2><div id="company-list" class="company-list"></div><details class="library-details"><summary>查看资料目录 <span>↓</span></summary><ul id="document-list"></ul></details><p class="library-foot" id="dataset-version">正在读取资料版本…</p></section>
+      </aside>
+    </div>
+    <footer class="site-footer"><span>FinEvidence Copilot <span class="footer-dot">/</span> 数字、公式、资料，在同一处。</span><span>本地固定样本 · 可复核计算</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

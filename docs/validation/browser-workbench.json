@@ -1,0 +1,29 @@
+{
+  "project": "FinEvidenceCopilot",
+  "checks": [
+    "request error and retry",
+    "比较青禾科技和澄海制造2025年净利率",
+    "利润为什么和现金流不同",
+    "青禾科技2026年营业收入",
+    "青禾科技2025年营业收入同比",
+    "青禾科技2023至2025年收入画图",
+    "SVG download",
+    "desktop layout",
+    "mobile result flow"
+  ],
+  "javascript_errors": [],
+  "date": "2026-10-12",
+  "desktop_viewport": [
+    1440,
+    1080
+  ],
+  "mobile_viewport": [
+    390,
+    844
+  ],
+  "error_check": "HTTP 429 injected in browser to verify UI recovery; not server throughput testing",
+  "screenshot_files": [
+    "docs/screenshots/workbench.png",
+    "docs/screenshots/mobile.png"
+  ]
+}
