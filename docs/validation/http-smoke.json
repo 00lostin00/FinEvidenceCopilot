@@ -1,0 +1,8 @@
+{
+  "health": "passed",
+  "ask": "passed",
+  "chart_svg_xml": "passed",
+  "invalid_422": "passed",
+  "missing_period": "passed",
+  "provider": "offline"
+}

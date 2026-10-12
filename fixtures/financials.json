@@ -1,0 +1,13 @@
+{
+  "version": "fictional-2026-10-12-v1",
+  "unit": "万元",
+  "companies": {"DEMO_A": "青禾科技（虚构）", "DEMO_B": "澄海制造（虚构）"},
+  "rows": [
+    {"company": "DEMO_A", "year": 2023, "revenue": "10000", "net_profit": "800", "operating_cashflow": "1100", "source": "fixture:DEMO_A:2023"},
+    {"company": "DEMO_A", "year": 2024, "revenue": "12000", "net_profit": "1080", "operating_cashflow": "1350", "source": "fixture:DEMO_A:2024"},
+    {"company": "DEMO_A", "year": 2025, "revenue": "15000", "net_profit": "1500", "operating_cashflow": "1750", "source": "fixture:DEMO_A:2025"},
+    {"company": "DEMO_B", "year": 2023, "revenue": "18000", "net_profit": "1080", "operating_cashflow": "900", "source": "fixture:DEMO_B:2023"},
+    {"company": "DEMO_B", "year": 2024, "revenue": "20000", "net_profit": "1000", "operating_cashflow": "1200", "source": "fixture:DEMO_B:2024"},
+    {"company": "DEMO_B", "year": 2025, "revenue": "21000", "net_profit": "840", "operating_cashflow": "1050", "source": "fixture:DEMO_B:2025"}
+  ]
+}

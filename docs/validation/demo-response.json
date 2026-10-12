@@ -1,0 +1,101 @@
+{
+  "run_id": "60b725556ada46c797853f0aa1f8deb9",
+  "status": "answered",
+  "provider": "offline",
+  "plan": {
+    "intent": "chart",
+    "companies": [
+      "DEMO_A"
+    ],
+    "years": [
+      2023,
+      2024,
+      2025
+    ],
+    "metric": "revenue",
+    "retrieval_query": "青禾科技2023至2025年收入画图",
+    "note": ""
+  },
+  "answer": "青禾科技（虚构） 2023年 营业收入：10000.00万元 [fixture:DEMO_A:2023]\n青禾科技（虚构） 2024年 营业收入：12000.00万元 [fixture:DEMO_A:2024]\n青禾科技（虚构） 2025年 营业收入：15000.00万元 [fixture:DEMO_A:2025]",
+  "facts": [
+    {
+      "company": "DEMO_A",
+      "year": 2023,
+      "metric": "revenue",
+      "value": "10000.00",
+      "unit": "万元",
+      "source": "fixture:DEMO_A:2023",
+      "formula": "直接读取年度虚构样本"
+    },
+    {
+      "company": "DEMO_A",
+      "year": 2024,
+      "metric": "revenue",
+      "value": "12000.00",
+      "unit": "万元",
+      "source": "fixture:DEMO_A:2024",
+      "formula": "直接读取年度虚构样本"
+    },
+    {
+      "company": "DEMO_A",
+      "year": 2025,
+      "metric": "revenue",
+      "value": "15000.00",
+      "unit": "万元",
+      "source": "fixture:DEMO_A:2025",
+      "formula": "直接读取年度虚构样本"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "a-2025:0",
+      "title": "青禾科技2025年度简报（虚构）",
+      "text": "青禾科技2025年度营业收入为15000万元，净利润1500万元，经营活动现金流量净额1750万元。金额单位为万元，全部数据为虚构教学样本。",
+      "source": "fixture:DEMO_A:2025:note",
+      "company": "DEMO_A",
+      "year": 2025,
+      "score": 13.014547
+    },
+    {
+      "id": "a-2024:0",
+      "title": "青禾科技2024年度简报（虚构）",
+      "text": "青禾科技2024年度营业收入为12000万元，净利润1080万元，经营活动现金流量净额1350万元。全部数据为虚构教学样本。",
+      "source": "fixture:DEMO_A:2024:note",
+      "company": "DEMO_A",
+      "year": 2024,
+      "score": 12.04469
+    },
+    {
+      "id": "a-2025:1",
+      "title": "青禾科技2025年度简报（虚构）",
+      "text": "演示性业务描述：交付增加和产品结构调整影响收入与利润；项目未验证因果关系。",
+      "source": "fixture:DEMO_A:2025:note",
+      "company": "DEMO_A",
+      "year": 2025,
+      "score": 10.599528
+    }
+  ],
+  "chart": {
+    "chart_type": "bar",
+    "title": "营业收入（虚构样本）",
+    "unit": "万元",
+    "labels": [
+      "青禾科技（虚构） 2023",
+      "青禾科技（虚构） 2024",
+      "青禾科技（虚构） 2025"
+    ],
+    "values": [
+      "10000.00",
+      "12000.00",
+      "15000.00"
+    ],
+    "source_refs": [
+      "fixture:DEMO_A:2023",
+      "fixture:DEMO_A:2024",
+      "fixture:DEMO_A:2025"
+    ]
+  },
+  "dataset_version": "fictional-2026-10-12-v1",
+  "elapsed_ms": 2.801,
+  "disclaimer": "全部公司、报表及金额均为虚构教学样本，不是实时行情或投资建议。"
+}
