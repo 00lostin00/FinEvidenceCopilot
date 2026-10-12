@@ -1,20 +1,21 @@
-<p align="center"><img src="docs/assets/banner.svg" alt="FinEvidence：让每个数字都有据可查" width="100%"></p>
-
-<p align="center">
-  <a href="https://github.com/00lostin00/FinEvidenceCopilot/actions/workflows/ci.yml"><img src="https://github.com/00lostin00/FinEvidenceCopilot/actions/workflows/ci.yml/badge.svg" alt="Checks"></a>
-  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11%2B-2358e8" alt="Python 3.11+"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-687b91" alt="MIT"></a>
-</p>
-
-<p align="center"><a href="#工作台">工作台</a> · <a href="#快速运行">快速运行</a> · <a href="#技术路径">技术路径</a> · <a href="#参考与范围比较">参考比较</a> · <a href="docs/FRONTEND.md">交互说明</a> · <a href="docs/guide.md">技术指南</a></p>
+![FinEvidence 财务研究笔记](docs/assets/banner.svg)
 
 # FinEvidence Copilot
 
-带来源的金融资料研究台。输入公司、年度与指标，查看计算结果、公式、资料摘录和图表；概念问题返回资料原文与出处。数字由 Decimal 计算，模型仅作为可选的结构化规划接口。
+> 青禾科技 2025 年营业收入同比是多少？数字依据哪两年的资料？
 
-默认使用两家虚构公司的固定教学样本，无需模型 Key。适合运行和检查一条完整的财务资料检索与指标交付流程。
+在内置虚构样本中，2025 年收入为 15000 万元，2024 年为 12000 万元；同比由程序计算为 **25.00%**。研究简报同时保留公式、取数来源和说明资料，概念问题则返回检索摘录与原文。
 
-## 工作台
+| 研究范围 | 当前样本 |
+| --- | --- |
+| 公司 | 青禾科技、澄海制造，两家虚构公司 |
+| 年度与资料 | 2023-2025，6 条年度记录、7 份资料 |
+| 计算 | Decimal 数值、同比基期、净利率与来源 |
+| 规划 | 默认规则；可选 LangChain 结构化模型接口 |
+
+这些数据用于复核查询流程，不是实时行情。默认无需模型密钥；尚未完成真实模型 API 的准确率评测。
+
+## 阅读一份研究简报
 
 ![金融资料研究台：收入趋势与证据资料](docs/screenshots/workbench.png)
 
@@ -27,7 +28,7 @@
 | 查询重放 | 当前浏览器保存最近 8 个问题，点击重新执行 |
 | 过程检查 | 任务类型、公司与年度范围、规划模式、资料版本和运行 ID |
 
-界面采用原创资料徽记、米白底色和蓝色指标系统，支持手机屏幕、键盘提交、等待与失败状态。页面数据通过同源 FastAPI 接口读取，不依赖 npm、CDN 或外部字体。详见[交互与实现说明](docs/FRONTEND.md)。
+界面按研究文档组织：上方横向问题栏、左侧简报正文、右侧引用与资料目录。衬线标题、细线分隔、连续数值栏与方角版面用于阅读和比较，支持手机屏幕、键盘提交、等待与失败状态。页面数据通过同源 FastAPI 接口读取，不依赖 npm、CDN 或外部字体。详见[交互与实现说明](docs/FRONTEND.md)。
 
 ## 快速运行
 
@@ -57,7 +58,7 @@ uv run --frozen --all-extras finevidence "青禾科技2023至2025年收入画图
 | `POST /v1/ask` | 接受 `{"question":"青禾科技2025年营业收入同比"}`，返回计划、数字与证据 |
 | `POST /v1/chart.svg` | 接受同格式的图表问题，返回 SVG |
 
-## 技术路径
+## 问题、计算与资料怎样对应
 
 ```mermaid
 flowchart LR

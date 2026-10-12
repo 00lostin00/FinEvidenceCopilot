@@ -1,4 +1,4 @@
-# 金融资料研究台
+# 企业财务研究简报
 
 工作台与 API 由同一个 FastAPI 进程提供。打开根路径即可使用，不依赖 npm 构建、CDN、外部字体或模型 Key。默认运行离线规划，对两家虚构公司的年度样本进行检索和计算。
 
@@ -55,7 +55,7 @@ sequenceDiagram
 
 ## 实现与安全边界
 
-静态页面位于 `src/finevidence/web/`，包括 `index.html`、`app.css`、`app.js` 与原创 `logo.svg`。静态路由使用 FastAPI `StaticFiles`，首页固定为包内文件，不接受任意文件路径。
+静态页面位于 `src/finevidence/web/`，包括 `index.html`、`app.css`、`report.css`、`app.js` 与原创 `logo.svg`。静态路由使用 FastAPI `StaticFiles`，首页固定为包内文件，不接受任意文件路径。
 
 查询、答案、计划和证据使用 `textContent` 和 DOM 节点渲染，不拼接用户 HTML。图表通过 `img` 与 Blob URL 呈现，不把 SVG 内容插入页面 DOM；更新时回收旧 URL。页面使用同源资源与严格 CSP，不加载第三方脚本。服务默认绑定 `127.0.0.1`；如需公开部署，应先补鉴权与访问控制。
 
@@ -77,3 +77,5 @@ uv run --frozen --all-extras python tools/smoke_http.py
 ## 扩展顺序
 
 接入真实资料时，先确认数据使用权限、报告期、币种、金额单位与合并范围，再加入资料导入和版本管理。后续可以增加混合检索与重排、返回单次计算的图表文件、历史运行归档与多用户鉴权。
+
+页面采用研究文档版面：横向问题栏、简报正文与引用边栏；指标摘要使用连续数值栏，正文和来源用细线分隔。手机把引用移动到正文之后，保留数值、公式与导出入口。
