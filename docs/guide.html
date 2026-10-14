@@ -204,7 +204,7 @@ uv run --frozen --all-extras finevidence &quot;青禾科技2025年扣非净利�
 uv run --frozen --all-extras ruff check .
 uv run --frozen --all-extras python tools\evaluate.py
 </code></pre>
-<p>2026-10-12当前提交的结果为56项测试通过、24/24条固定回归通过、Ruff通过。将测试总数与回归样本数分开：56项检查覆盖计算、模式、接口、图表及异常；24条回归覆盖业务输入。二者不能相加成“80道模型问答准确率”。</p>
+<p>2026-10-14 本地验证结果为64项测试通过、24/24条固定回归通过、Ruff通过。将测试总数与回归样本数分开：64项检查覆盖计算、模式、接口、图表、前端契约及异常；24条回归覆盖业务输入。这些检查不是模型问答准确率。</p>
 <h2 id="2">2. 数据契约与财务口径</h2>
 <h3 id="21">2.1 原始数据的确定范围</h3>
 <p><code>financials.json</code> 包含 <code>version</code>、<code>unit</code>、<code>companies</code>、<code>rows</code>。公司使用 <code>DEMO_A</code> 和 <code>DEMO_B</code>，避免看起来像真实证券代码。金额均为字符串，单位均为万元，数据仅有年度，没有季度、半年或滚动十二个月口径。</p>
@@ -447,7 +447,7 @@ score(q,d) = 对查询中的去重token求和
 <p><code>chart_type</code>目前只有bar，title和unit由服务确定；labels、values、source_refs长度必须相等。公司/年度是维度，单指标是度量。ChartSpec不需要知道svg具体x坐标，渲染器不需要重新查询财务事实，二者分工后更容易替换为图表组件。</p>
 <p>同图只允许一个metric和unit。例如收入万元和净利率%不能放到同一条共同量轴，除非产品明确采用双轴并处理解释。目前直接拒绝混合，所以“一张图比较青禾收入和净利率”会要求分别查询。</p>
 <h3 id="64-svg">6.4 SVG渲染和负值</h3>
-<p>画布固定900宽，最大绝对值映射到200像素，中心基线x=530；正值从530向右，负值从 <code>530-width</code> 向左。label、title和unit经过HTML escape，避免将 <code>&lt;script&gt;</code> 或 <code>&lt;img&gt;</code> 变成标签。value来自程序计算；labels数量在正常查询中至多2家公司×4个年度，属于受限规模。</p>
+<p>画布固定620宽。全部为非负值时，起点x=28，最大绝对值映射到564像素；含负值时，零轴x=310，单侧最大条宽260像素，正值从零轴向右，负值从 <code>310-width</code> 向左。图表行上方分别保留标签与数值，页面在手机上以独立滚动区域呈现，避免把全部文字压缩到屏幕宽度。label、title和unit经过HTML escape，避免将 <code>&lt;script&gt;</code> 或 <code>&lt;img&gt;</code> 变成标签。value来自程序计算；当前样本正常查询至多2家公司×3个年度，属于受限规模。</p>
 <p>条形图用于比较规模，净利率为负也能显示方向。图上的文本保留两位的数字字符串，像素比例的小数误差不改写实际金额。来源引用在JSON的ChartSpec中保留，目前SVG正文只显示虚构标记，若要交付可独立溯源的图，应补图下注释和来源链接。</p>
 <h3 id="65">6.5 图表验收</h3>
 <p>检查数据点个数和预期一致、顺序按公司和升序年度、单位单一、数值与Fact逐个对应、负值方向正确、0值仍有标签。用XML解析检查SVG可解析，但XML合法不代表图表有可读性。真实业务要增加长名称、极大/极小数值、密集标签、窄屏、色盲和打印场景。</p>

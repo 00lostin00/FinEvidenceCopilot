@@ -4,8 +4,8 @@
   "cases": 24,
   "passed": 24,
   "faq_retrieval_cases": 4,
-  "p50_ms": 0.924,
-  "p95_nearest_rank_ms": 1.299,
+  "p50_ms": 1.228,
+  "p95_nearest_rank_ms": 1.766,
   "details": [
     {
       "id": "metric-a-revenue",

@@ -1,22 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" role="img" aria-labelledby="title description">
-<rect width="100%" height="100%" rx="12" fill="#f8fafc"/>
-<title>营业收入（虚构样本）</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="300" viewBox="0 0 620 300" role="img" aria-labelledby="title description">
+<rect width="100%" height="100%" fill="#fbfcff"/>
+<title id="title">营业收入（虚构样本）</title>
 <desc id="description">全部数据为虚构教学样本，数值与来源在工作台明细中列出。</desc>
 <g font-family="system-ui, -apple-system, Segoe UI, Microsoft YaHei, sans-serif">
-<text id="title" x="28" y="36" font-size="17" font-weight="600" fill="#334155">营业收入（虚构样本）</text>
-<text x="28" y="59" font-size="11" fill="#94a3b8">同一指标口径 · 单位：万元</text>
-<text x="858" y="59" text-anchor="end" font-size="10" letter-spacing="1" fill="#94a3b8">FINEVIDENCE / DATA VIEW</text>
-<line x1="390" y1="78" x2="390" y2="268" stroke="#d3dce9"/>
-<text x="28" y="108" font-size="13" fill="#64748b">青禾科技（虚构） 2023</text>
-<rect x="390.00" y="87" width="240.00" height="30" rx="5" fill="#a8bef2"/>
-<text x="858" y="108" text-anchor="end" font-size="14" font-weight="600" fill="#334155">10000.00</text>
-<text x="28" y="171" font-size="13" fill="#64748b">青禾科技（虚构） 2024</text>
-<rect x="390.00" y="150" width="288.00" height="30" rx="5" fill="#7298ed"/>
-<text x="858" y="171" text-anchor="end" font-size="14" font-weight="600" fill="#334155">12000.00</text>
-<text x="28" y="234" font-size="13" fill="#64748b">青禾科技（虚构） 2025</text>
-<rect x="390.00" y="213" width="360.00" height="30" rx="5" fill="#2358e8"/>
-<text x="858" y="234" text-anchor="end" font-size="14" font-weight="600" fill="#334155">15000.00</text>
-<line x1="28" y1="287" x2="872" y2="287" stroke="#e2e8f0"/>
-<text x="28" y="309" font-size="10" fill="#94a3b8">全部数据为虚构教学样本；负值向左，正值向右。</text>
+<text x="28" y="31" font-size="18" fill="#30465f">青禾科技（虚构） 2023</text>
+<text x="592" y="31" text-anchor="end" font-size="20" font-weight="650" fill="#152840">10000.00</text>
+<rect x="28" y="46" width="564" height="20" rx="4" fill="#edf2f9"/>
+<rect x="28.00" y="46" width="376.00" height="20" rx="4" fill="#a7bdea"/>
+<text x="28" y="116" font-size="18" fill="#30465f">青禾科技（虚构） 2024</text>
+<text x="592" y="116" text-anchor="end" font-size="20" font-weight="650" fill="#152840">12000.00</text>
+<rect x="28" y="131" width="564" height="20" rx="4" fill="#edf2f9"/>
+<rect x="28.00" y="131" width="451.20" height="20" rx="4" fill="#628ade"/>
+<text x="28" y="201" font-size="18" fill="#30465f">青禾科技（虚构） 2025</text>
+<text x="592" y="201" text-anchor="end" font-size="20" font-weight="650" fill="#152840">15000.00</text>
+<rect x="28" y="216" width="564" height="20" rx="4" fill="#edf2f9"/>
+<rect x="28.00" y="216" width="564.00" height="20" rx="4" fill="#245bda"/>
+<text x="28" y="287" font-size="12" fill="#52667e">单位：万元；虚构教学数据</text>
 </g>
 </svg>

@@ -1,11 +1,12 @@
 # 本地验证记录
 
-日期：2026-10-12。环境：Windows、Python3.12.7，依赖按uv.lock。
+日期：2026-10-14。环境：Windows、Python3.12.7，依赖按uv.lock。
 
 | 验证 | 命令 | 结果 |
 | --- | --- | --- |
-| 代码与接口测试 | `uv run --frozen --all-extras pytest` | 56项通过 |
+| 代码与接口测试 | `uv run --frozen --all-extras pytest` | 64项通过 |
 | 静态检查 | `uv run --frozen --all-extras ruff check .` | 通过 |
+| 浏览器脚本语法 | `node --check src/finevidence/web/app.js` | 通过 |
 | 固定离线业务回归 | `uv run --frozen --all-extras python tools/evaluate.py` | 24/24通过 |
 | 实际HTTP | `uv run --frozen --all-extras python tools/smoke_http.py` | health、ask、图表SVG解析、422、缺失年度均通过 |
 | 模型适配器组装 | 测试中的真实LangChain对象构造 | 无网络组装通过 |

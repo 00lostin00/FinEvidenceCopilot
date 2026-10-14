@@ -1,5 +1,5 @@
 {
-  "run_id": "b3c6d15613e246328ad8c82d3f16932b",
+  "run_id": "668ea23a5a604955880a4ef007de5c7a",
   "status": "answered",
   "provider": "offline",
   "plan": {
@@ -96,6 +96,6 @@
     ]
   },
   "dataset_version": "fictional-2026-10-12-v1",
-  "elapsed_ms": 2.172,
+  "elapsed_ms": 3.979,
   "disclaimer": "全部公司、报表及金额均为虚构教学样本，不是实时行情或投资建议。"
 }

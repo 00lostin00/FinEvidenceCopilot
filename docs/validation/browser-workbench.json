@@ -8,12 +8,18 @@
     "青禾科技2025年营业收入同比",
     "青禾科技2023至2025年收入画图",
     "SVG download",
+    "answer with sources clipboard",
+    "source anchor focus",
+    "history clear undo",
+    "query URL restore",
+    "field error recovery",
     "desktop layout",
     "mobile result flow"
   ],
   "javascript_errors": [],
-  "date": "2026-10-12",
-  "interface": "research brief: question desk, report body and citation margin",
+  "date": "2026-10-14",
+  "browser": "Chrome",
+  "interface": "研究问题与示例、结果简报、来源核验与资料目录",
   "desktop_viewport": [
     1440,
     1080
@@ -21,6 +27,11 @@
   "mobile_viewport": [
     390,
     844
+  ],
+  "additional_widths": [
+    320,
+    768,
+    1024
   ],
   "error_check": "HTTP 429 injected in browser to verify UI recovery; not throughput testing"
 }

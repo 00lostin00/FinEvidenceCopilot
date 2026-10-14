@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass
+from xml.etree import ElementTree
 
 import pytest
 
@@ -64,7 +65,14 @@ def test_svg_contains_no_unescaped_markup():
     )
     result = render_svg(spec)
     assert "<script>" not in result and "<img" not in result
-    assert "&lt;script&gt;" in result and 'x="330.00"' in result
+    assert "&lt;script&gt;" in result
+    root = ElementTree.fromstring(result)
+    axis = root.find(".//{http://www.w3.org/2000/svg}line")
+    negative_bar = root.findall(".//{http://www.w3.org/2000/svg}rect")[-1]
+    assert float(negative_bar.attrib["x"]) < float(axis.attrib["x1"])
+    assert float(negative_bar.attrib["x"]) + float(negative_bar.attrib["width"]) == float(
+        axis.attrib["x1"]
+    )
 
 
 def test_trace_groups_events_and_retains_plan_query(copilot):

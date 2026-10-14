@@ -11,12 +11,23 @@
   let chartUrl = null;
   let requestGeneration = 0;
   let toastTimer;
+  let clearedHistory = null;
+  const numberFormat = new Intl.NumberFormat("zh-CN", {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
   function node(tag, className, content) {
     const element = document.createElement(tag);
     if (className) element.className = className;
     if (content !== undefined) element.textContent = content;
     return element;
+  }
+  function icon(name, className = "icon") {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", className);
+    svg.setAttribute("aria-hidden", "true");
+    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    use.setAttribute("href", `/static/icons.svg#${name}`);
+    svg.append(use);
+    return svg;
   }
   function readHistory() {
     try {
@@ -25,17 +36,20 @@
     } catch { return []; }
   }
   function saveHistory(question) {
+    clearedHistory = null;
+    $("undo-history").hidden = true;
     history = [question, ...history.filter((item) => item !== question)].slice(0, 8);
     try { localStorage.setItem(historyKey, JSON.stringify(history)); } catch { /* Private browsing can disable storage. */ }
     renderHistory();
   }
   function renderHistory() {
+    $("history-count").textContent = history.length;
     $("history-list").replaceChildren();
     if (!history.length) $("history-list").append(node("p", "aside-empty", "这里会保存最近 8 个研究问题。"));
     for (const question of history) {
       const button = node("button", "history-item");
       button.type = "button";
-      button.append(node("span", "", question), node("b", "", "↗"));
+      button.append(node("span", "", question), icon("arrow"));
       button.disabled = busy;
       button.addEventListener("click", () => research(question));
       $("history-list").append(button);
@@ -49,6 +63,10 @@
     toastTimer = setTimeout(() => { $("toast").hidden = true; }, 3200);
   }
   function updateCount() { $("char-count").textContent = $("question").value.length; }
+  function clearFieldError() {
+    $("question-error").hidden = true;
+    $("question").removeAttribute("aria-invalid");
+  }
   function setBusy(value) {
     busy = value;
     $("submit").disabled = value;
@@ -56,6 +74,7 @@
     $("results").setAttribute("aria-busy", String(value));
     $("loading").hidden = !value;
     $("question").readOnly = value;
+    $("undo-history").disabled = value;
     document.querySelectorAll("#examples button").forEach((button) => { button.disabled = value; });
     renderHistory();
   }
@@ -93,8 +112,10 @@
       $("company-count").textContent = catalog.companies.length;
       $("year-span").textContent = `${catalog.years[0]}—${catalog.years.at(-1)}`;
       $("document-count").textContent = catalog.documents.length;
-      $("provider-label").textContent = catalog.provider === "llm" ? "模型规划" : "离线规划 · 无需 Key";
-      $("service-status").replaceChildren(node("i"), document.createTextNode("本地服务已连接"));
+      $("provider-label").textContent = catalog.provider === "llm" ? "模型规划模式" : "本地样本模式";
+      const dot = node("i");
+      dot.setAttribute("aria-hidden", "true");
+      $("service-status").replaceChildren(dot, document.createTextNode("本地服务已连接"));
       $("service-status").className = "connection connected";
       $("dataset-version").textContent = `${catalog.dataset_version} · ${catalog.record_count} 条年度记录`;
       $("company-list").replaceChildren();
@@ -110,7 +131,9 @@
       for (const item of catalog.documents) $("document-list").append(node("li", "", item.title));
     } catch (error) {
       $("service-status").className = "connection failed";
-      $("service-status").replaceChildren(node("i"), document.createTextNode("服务未连接"));
+      const dot = node("i");
+      dot.setAttribute("aria-hidden", "true");
+      $("service-status").replaceChildren(dot, document.createTextNode("服务未连接"));
       $("dataset-version").textContent = "资料库暂不可用，请检查服务。";
       notice(error.message, "error");
     }
@@ -121,19 +144,30 @@
     for (const fact of visible) {
       const card = node("article", "fact-card");
       const number = Number(fact.value);
-      const display = Number.isFinite(number) ? number.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}) : fact.value;
+      const display = Number.isFinite(number) ? numberFormat.format(number) : fact.value;
       const value = node("p", "fact-value", display);
       value.append(node("small", "", fact.unit));
       card.append(node("p", "fact-label", `${fact.year} · ${metrics[fact.metric] || fact.metric}`), value, node("p", "fact-company", `${names[fact.company] || fact.company} / 虚构样本`));
       $("facts").append(card);
     }
     $("fact-table").replaceChildren();
+    const sources = [...new Set(facts.flatMap((fact) => fact.source.split(";")))];
     for (const fact of facts) {
       const row = node("tr");
-      for (const value of [`${names[fact.company] || fact.company} ${fact.year}`, metrics[fact.metric] || fact.metric, `${fact.value} ${fact.unit}`, fact.source]) row.append(node("td", "", value));
+      for (const value of [`${names[fact.company] || fact.company} ${fact.year}`, metrics[fact.metric] || fact.metric, `${fact.value} ${fact.unit}`]) row.append(node("td", "", value));
+      const sourceCell = node("td");
+      fact.source.split(";").forEach((source, index) => {
+        if (index) sourceCell.append(document.createTextNode("；"));
+        const link = node("a", "table-source", source);
+        link.href = `#fact-source-${sources.indexOf(source)}`;
+        link.addEventListener("click", () => setTimeout(() => document.getElementById(link.hash.slice(1))?.focus({preventScroll: true}), 0));
+        sourceCell.append(link);
+      });
+      row.append(sourceCell);
       $("fact-table").append(row);
     }
     $("table-wrap").hidden = !facts.length;
+    $("data-heading").hidden = !facts.length;
   }
   function renderEvidence(result) {
     $("evidence-list").replaceChildren();
@@ -141,17 +175,26 @@
     if (!result.evidence.length) $("evidence-list").append(node("p", "aside-empty", result.facts.length ? "该范围未命中说明材料；指标取数来源列在下方。" : "当前问题没有可引用的资料。试试具体指标或财务概念。"));
     result.evidence.forEach((item, index) => {
       const article = node("article", "evidence-card");
+      article.id = `evidence-${index}`;
       const detail = node("details");
       const summary = node("summary");
-      summary.append(node("span", "evidence-number", `来源 ${String(index + 1).padStart(2, "0")}`), node("h3", "evidence-title", item.title), node("p", "evidence-preview", item.text.length > 75 ? `${item.text.slice(0, 75)}…` : item.text), node("span", "evidence-toggle", "展开原文 ↗"));
+      const toggle = node("span", "evidence-toggle", "展开原文");
+      toggle.append(icon("chevron"));
+      summary.append(node("span", "evidence-number", `来源 ${index + 1}`), node("h3", "evidence-title", item.title), node("p", "evidence-preview", item.text.length > 100 ? `${item.text.slice(0, 100)}…` : item.text), toggle);
       detail.append(summary, node("p", "evidence-full", item.text));
+      detail.addEventListener("toggle", () => toggle.replaceChildren(document.createTextNode(detail.open ? "收起原文" : "展开原文"), icon("chevron")));
       article.append(detail, node("p", "source-line", `${item.source} · ${item.id}`));
       $("evidence-list").append(article);
     });
     $("fact-sources").replaceChildren();
     const sources = [...new Set(result.facts.flatMap((fact) => fact.source.split(";")))];
     if (sources.length) $("fact-sources").append(node("p", "source-title", "结构化取数来源"));
-    sources.forEach((source) => $("fact-sources").append(node("p", "fact-source", source)));
+    sources.forEach((source, index) => {
+      const line = node("p", "fact-source", source);
+      line.id = `fact-source-${index}`;
+      line.tabIndex = -1;
+      $("fact-sources").append(line);
+    });
   }
   function renderPlan(result) {
     $("formula-list").replaceChildren();
@@ -175,6 +218,7 @@
     chartUrl = null;
     $("chart-image").removeAttribute("src");
     $("chart-image").hidden = true;
+    $("chart-image").closest(".chart-frame").hidden = true;
     $("download-chart").disabled = true;
   }
   async function renderChart(result, question, generation) {
@@ -182,6 +226,7 @@
     $("chart-panel").hidden = !result.chart;
     if (!result.chart) return;
     $("chart-title").textContent = result.chart.title;
+    $("chart-caption").textContent = `单位：${result.chart.unit} · ${result.chart.values.length} 个同口径数值`;
     $("chart-image").alt = `${result.chart.title}，单位${result.chart.unit}。${result.chart.labels.map((label, index) => `${label}：${result.chart.values[index]}`).join("；")}`;
     $("chart-status").hidden = false;
     $("chart-status").textContent = "正在生成可导出的 SVG 图表…";
@@ -191,8 +236,17 @@
       const blob = await response.blob();
       if (generation !== requestGeneration) return;
       chartUrl = URL.createObjectURL(blob);
+      const source = await blob.text();
+      const svg = new DOMParser().parseFromString(source, "image/svg+xml").documentElement;
+      const width = Number(svg.getAttribute("width"));
+      const height = Number(svg.getAttribute("height"));
+      if (Number.isFinite(width) && width > 0 && Number.isFinite(height) && height > 0) {
+        $("chart-image").width = width;
+        $("chart-image").height = height;
+      }
       $("chart-image").src = chartUrl;
       $("chart-image").hidden = false;
+      $("chart-image").closest(".chart-frame").hidden = false;
       $("chart-status").hidden = true;
       $("download-chart").disabled = false;
     } catch (error) {
@@ -202,11 +256,27 @@
   async function research(question) {
     if (busy) return;
     question = question.trim();
-    if (!question || question.length > 500) { $("question").focus(); toast("请输入 1—500 字的研究问题。"); return; }
+    if (!question || question.length > 500) {
+      $("question-error").textContent = "请输入 1—500 字的问题，包含公司、年份和一个指标。";
+      $("question-error").hidden = false;
+      $("question").setAttribute("aria-invalid", "true");
+      $("question").focus();
+      return;
+    }
+    clearFieldError();
     $("question").value = question;
     updateCount();
+    const url = new URL(window.location.href);
+    url.searchParams.set("q", question);
+    window.history.replaceState(null, "", url);
+    document.querySelectorAll("#examples [data-question]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.question === question)));
     const generation = ++requestGeneration;
     lastResult = null;
+    releaseChart();
+    $("chart-panel").hidden = true;
+    $("calculation").open = false;
+    $("copy-answer").replaceChildren(icon("copy"), document.createTextNode("复制结果"));
+    $("download-chart").replaceChildren(icon("download"), document.createTextNode("导出 SVG"));
     notice("");
     setBusy(true);
     $("evidence-count").textContent = "0";
@@ -226,12 +296,12 @@
       renderPlan(result);
       $("steps").replaceChildren();
       const labels = result.status === "answered" ? ["计划已确认", "资料已检索", result.facts.length ? "计算已完成" : "摘录已整理"] : ["范围已检查", "等待补充问题"];
-      labels.forEach((label) => { const span = node("span"); span.append(node("i", "", "✓"), document.createTextNode(label)); $("steps").append(span); });
+      labels.forEach((label) => { const span = node("span"); span.append(icon("check"), document.createTextNode(label)); $("steps").append(span); });
       $("answer-title").textContent = result.plan.intent === "faq" ? "资料摘录" : result.plan.intent === "compare" ? "对比结果" : "结果摘要";
       $("answer-text").textContent = result.answer;
-      $("run-id").textContent = `RUN / ${result.run_id.slice(0, 12)}`;
+      $("run-id").textContent = `运行记录：${result.run_id.slice(0, 12)}`;
       $("elapsed").textContent = `${result.elapsed_ms} ms · 服务端处理`;
-      $("result-meta").textContent = result.status === "answered" ? `${intents[result.plan.intent]} · 已完成` : `${intents[result.plan.intent]} · 需补充`;
+      $("result-meta").textContent = result.status === "answered" ? `${intents[result.plan.intent]} · 已完成` : result.status === "no_evidence" ? "无对应资料 · 可修改问题" : `${intents[result.plan.intent]} · 需补充`;
       $("result-meta").className = result.status === "answered" ? "result-meta success" : "result-meta";
       $("answer-content").hidden = false;
       if (result.status !== "answered") notice(result.answer, "info");
@@ -246,20 +316,35 @@
     } finally { setBusy(false); }
   }
   $("ask-form").addEventListener("submit", (event) => { event.preventDefault(); research($("question").value); });
-  $("question").addEventListener("input", updateCount);
+  $("question").addEventListener("input", () => { updateCount(); clearFieldError(); });
   $("question").addEventListener("keydown", (event) => { if ((event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); research($("question").value); } });
   document.querySelectorAll("#examples [data-question]").forEach((button) => button.addEventListener("click", () => research(button.dataset.question)));
   $("clear-history").addEventListener("click", () => {
+    clearedHistory = [...history];
     history = [];
     try { localStorage.removeItem(historyKey); } catch { /* Storage can be unavailable. */ }
     renderHistory();
-    toast("查询记录已清空");
+    $("undo-history").hidden = false;
+    toast("查询记录已清空，可在最近研究中撤销。");
+  });
+  $("undo-history").addEventListener("click", () => {
+    if (!clearedHistory) return;
+    history = clearedHistory;
+    clearedHistory = null;
+    try { localStorage.setItem(historyKey, JSON.stringify(history)); } catch { /* Storage can be unavailable. */ }
+    $("undo-history").hidden = true;
+    renderHistory();
+    toast("查询记录已恢复");
   });
   $("copy-answer").addEventListener("click", async () => {
     if (!lastResult) return;
     const result = lastResult;
     const text = [result.answer, ...result.facts.map((fact) => `公式：${fact.formula}\n来源：${fact.source}`), ...result.evidence.map((item) => `[${item.id}] ${item.title}\n${item.text}\n${item.source}`), `样本版本：${result.dataset_version}`, result.disclaimer].join("\n\n");
-    try { await navigator.clipboard.writeText(text); toast("结果、公式与引用已复制"); }
+    try {
+      await navigator.clipboard.writeText(text);
+      if (lastResult === result) $("copy-answer").replaceChildren(icon("check"), document.createTextNode("已复制"));
+      toast("结果、公式与引用已复制");
+    }
     catch { toast("浏览器未允许剪贴板访问，请手动选中结果复制。"); }
   });
   $("download-chart").addEventListener("click", () => {
@@ -270,11 +355,13 @@
     document.body.append(link);
     link.click();
     link.remove();
-    toast("图表已导出");
+    $("download-chart").replaceChildren(icon("check"), document.createTextNode("已发起下载"));
+    toast("已发起 SVG 下载，可在浏览器下载列表中查看。");
   });
   window.addEventListener("beforeunload", releaseChart);
   updateCount();
   renderHistory();
   loadCatalog();
-  research($("question").value);
+  const question = new URL(window.location.href).searchParams.get("q");
+  research(question?.trim() && question.length <= 500 ? question : $("question").value);
 })();
